@@ -14,7 +14,7 @@ import {
 import {
   LineChart, Line, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine
 } from "recharts";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, type User as FirebaseUser } from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut, type User as FirebaseUser } from "firebase/auth";
 import { firebaseAuth, firebaseConfigured } from "@/lib/firebase";
 
 /* ---------------------------------------------------------------------
@@ -380,7 +380,27 @@ function AuthGate({ children }: { children: React.ReactElement<{ user?: Firebase
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   useEffect(() => { if (!firebaseAuth) { setChecking(false); return; } return onAuthStateChanged(firebaseAuth, (nextUser) => { setUser(nextUser); setChecking(false); }); }, []);
-  const login = async () => { if (!firebaseAuth) return; setLoading(true); setError(""); try { const result = await signInWithPopup(firebaseAuth, new GoogleAuthProvider()); if (AUTH_GMAIL_ONLY && !result.user.email?.toLowerCase().endsWith("@gmail.com")) { await signOut(firebaseAuth); throw new Error("Please use a personal @gmail.com account. Workspace access can be enabled in NEXT_PUBLIC_AUTH_GMAIL_ONLY."); } } catch (authError) { setError(authError instanceof Error ? authError.message : "Google sign-in could not be completed."); } finally { setLoading(false); } };
+  const login = async () => {
+    if (!firebaseAuth) return;
+    setLoading(true);
+    setError("");
+    try {
+      const result = await signInWithPopup(firebaseAuth, new GoogleAuthProvider());
+      if (AUTH_GMAIL_ONLY && !result.user.email?.toLowerCase().endsWith("@gmail.com")) {
+        await signOut(firebaseAuth);
+        throw new Error("Please use a personal @gmail.com account. Workspace access can be enabled in NEXT_PUBLIC_AUTH_GMAIL_ONLY.");
+      }
+    } catch (authError) {
+      const code = authError && typeof authError === "object" && "code" in authError ? authError.code : "";
+      if (code === "auth/popup-blocked") {
+        await signInWithRedirect(firebaseAuth, new GoogleAuthProvider());
+        return;
+      }
+      setError(authError instanceof Error ? authError.message : "Google sign-in could not be completed.");
+    } finally {
+      setLoading(false);
+    }
+  };
   if (checking) return <div className="flex min-h-screen items-center justify-center bg-[#080B12] text-white/50"><LoaderCircle className="h-5 w-5 animate-spin" /></div>;
   if (!user) return <LoginPage onLogin={login} loading={loading} error={error} />;
   return React.cloneElement(children, { user });
