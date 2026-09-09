@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #000000;
+}
+
+.login-atmosphere {
+  background: radial-gradient(circle at 50% 48%, rgba(41, 130, 160, 0.15), transparent 31%), linear-gradient(120deg, rgba(7, 22, 31, 0.94), rgba(8, 11, 18, 0.99));
+}
+
+.login-glow {
+  position: absolute;
+  width: 34vw;
+  height: 34vw;
+  min-width: 260px;
+  min-height: 260px;
+  border-radius: 999px;
+  filter: blur(44px);
+  opacity: 0.16;
+  animation: login-drift 13s ease-in-out infinite alternate;
+}
+
+.login-glow-one { left: 8%; top: 8%; background: #087f9b; }
+.login-glow-two { right: 8%; bottom: 4%; background: #d97729; animation-delay: -5s; }
+
+.rain-field span {
+  position: absolute;
+  top: -12%;
+  width: 1px;
+  height: var(--drop-height, 18px);
+  background: linear-gradient(transparent, rgba(125, 211, 252, 0.5));
+  transform: rotate(16deg);
+  animation: rain-fall var(--drop-duration, 4s) linear var(--drop-delay, 0s) infinite;
+}
+
+.maharashtra-contour {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(44vw, 500px);
+  height: min(64vw, 650px);
+  transform: translate(-50%, -50%) rotate(18deg) skewY(-8deg);
+  border: 1px solid rgba(125, 211, 252, 0.1);
+  clip-path: polygon(45% 0, 68% 12%, 59% 26%, 82% 39%, 69% 59%, 76% 76%, 51% 100%, 34% 84%, 12% 77%, 25% 57%, 6% 40%, 29% 24%, 20% 8%);
+  opacity: 0.55;
+}
+
+.maharashtra-contour span { position: absolute; border: 1px solid rgba(56, 189, 248, 0.14); border-radius: 50%; animation: contour-breathe 6s ease-in-out infinite; }
+.maharashtra-contour span:nth-child(1) { inset: 25%; }
+.maharashtra-contour span:nth-child(2) { inset: 39%; animation-delay: -2s; }
+.maharashtra-contour span:nth-child(3) { inset: 48%; animation-delay: -4s; }
+
+.radar-orbit { position: absolute; left: 50%; top: 50%; border: 1px solid rgba(125, 211, 252, 0.14); border-radius: 50%; transform: translate(-50%, -50%) rotate(-28deg); border-left-color: transparent; animation: radar-sweep 9s linear infinite; }
+.radar-orbit-one { width: min(58vw, 700px); height: min(58vw, 700px); }
+.radar-orbit-two { width: min(36vw, 440px); height: min(36vw, 440px); animation-duration: 6s; animation-direction: reverse; border-color: rgba(231, 185, 76, 0.11); border-right-color: transparent; }
+
+@keyframes rain-fall { from { transform: translate3d(0, -10vh, 0) rotate(16deg); } to { transform: translate3d(-10vw, 115vh, 0) rotate(16deg); } }
+@keyframes login-drift { from { transform: translate3d(-5%, -3%, 0) scale(0.95); } to { transform: translate3d(8%, 6%, 0) scale(1.1); } }
+@keyframes radar-sweep { to { transform: translate(-50%, -50%) rotate(332deg); } }
+@keyframes contour-breathe { 50% { transform: scale(1.16); opacity: 0.3; } }
+
+.leaflet-container {
+  background: #10202b;
+  font-family: Inter, sans-serif;
+}
+
+.leaflet-control-zoom a {
+  background: rgba(8, 15, 24, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(8, 15, 24, 0.72) !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.leaflet-control-attribution a {
+  color: #7dd3fc !important;
+}
+
+.resilia-zone-marker,
+.facility-marker {
+  background: transparent;
+  border: 0;
+}
+
+.resilia-zone-marker span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  background: var(--marker-color);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--marker-color) 22%, transparent), 0 5px 16px rgba(0, 0, 0, 0.35);
+  color: #04101a;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.resilia-zone-marker .risk-pulse {
+  animation: risk-marker-pulse 2s ease-in-out infinite;
+}
+
+@keyframes risk-marker-pulse {
+  0%, 100% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--marker-color) 22%, transparent), 0 5px 16px rgba(0, 0, 0, 0.35); }
+  50% { box-shadow: 0 0 0 13px color-mix(in srgb, var(--marker-color) 8%, transparent), 0 5px 20px rgba(0, 0, 0, 0.45); }
+}
+
+.facility-marker span {
+  display: flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(125, 211, 252, 0.65);
+  border-radius: 8px;
+  background: #0b2635;
+  color: #a7f3d0;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.facility-marker:hover span {
+  transform: scale(1.14);
+  box-shadow: 0 0 0 5px rgba(125, 211, 252, 0.12), 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.leaflet-tile-pane { filter: saturate(0.82) brightness(0.72) contrast(1.06); }
+
+.leaflet-tooltip {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  background: rgba(8, 15, 24, 0.94);
+  color: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  font-size: 11px;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .interactive-panel {
+    transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 280ms ease, background-color 280ms ease,
+      box-shadow 280ms ease;
+  }
+
+  .interactive-panel:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.14);
+    background-color: rgba(255, 255, 255, 0.045);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22),
+      0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  }
+
+  button {
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 180ms ease, background-color 180ms ease,
+      border-color 180ms ease, color 180ms ease;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  button:active {
+    transform: translateY(1px) scale(0.98);
+    filter: brightness(0.98);
+  }
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.75);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
