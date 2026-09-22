@@ -346,19 +346,53 @@ function avatarUrl(user: FirebaseUser | null | undefined) {
 }
 
 function LoginPage({ onLogin, loading, error }) {
-  const rain = Array.from({ length: 34 }, (_, index) => ({ left: `${(index * 29) % 100}%`, delay: `${(index % 9) * 0.42}s`, duration: `${3.5 + (index % 5) * 0.45}s`, height: `${12 + (index % 4) * 6}px` }));
+  const [sceneTilt, setSceneTilt] = useState({ x: 0, y: 0 });
+  const [panelTilt, setPanelTilt] = useState({ x: 0, y: 0 });
+  const particles = Array.from({ length: 24 }, (_, index) => ({
+    left: `${(index * 41) % 100}%`,
+    top: `${(index * 67) % 100}%`,
+    delay: `${(index % 8) * 0.55}s`,
+    size: `${1 + (index % 3) * 0.6}px`,
+  }));
+  const contourLines = Array.from({ length: 7 }, (_, index) => index);
+  const backgroundWaves = Array.from({ length: 11 }, (_, index) => index);
+  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType === "touch") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    setSceneTilt({ x: x * 7, y: y * -5 });
+    setPanelTilt({ x: x * 3.5, y: y * -3 });
+  };
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080B12] px-5 text-white">
-      <div className="login-atmosphere pointer-events-none absolute inset-0"><div className="login-glow login-glow-one" /><div className="login-glow login-glow-two" /><div className="rain-field">{rain.map((drop, index) => <span key={index} style={{ left: drop.left, "--drop-delay": drop.delay, "--drop-duration": drop.duration, "--drop-height": drop.height } as React.CSSProperties} />)}</div><div className="maharashtra-contour"><span /><span /><span /></div><div className="radar-orbit radar-orbit-one" /><div className="radar-orbit radar-orbit-two" /></div>
-      <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="relative z-10 w-full max-w-[420px]">
-        <GlassPanel className="border-sky-300/15 bg-[#080f18]/95 p-8 shadow-[0_24px_100px_rgba(0,0,0,.58),0_0_42px_rgba(14,165,233,.08)] sm:p-10">
-          <div className="mb-8 text-center"><img src="/resiliai-symbol.svg" alt="ResiliAI logo" className="mx-auto mb-4 h-12 w-12 invert" /><div className="text-2xl font-black tracking-tight text-white" style={{ fontFamily: "'Times New Roman', Times, serif" }}>RESILI AI</div><p className="mt-2 text-[13px] text-white/45">Real-time disaster resilience for Maharashtra</p></div>
-          {error && <motion.div animate={{ x: [0, -5, 5, -3, 3, 0] }} className="mb-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-[12px] text-red-200">{error}</motion.div>}
-          <button disabled={loading || !firebaseConfigured} onClick={onLogin} className="flex w-full items-center justify-center gap-3 rounded-xl border border-sky-300/25 bg-white/[0.07] px-4 py-3 text-[13px] font-semibold text-white shadow-[0_8px_26px_rgba(14,165,233,.1)] transition hover:border-sky-300/50 hover:bg-sky-300/10 hover:shadow-[0_8px_30px_rgba(14,165,233,.2)] disabled:cursor-not-allowed disabled:opacity-60">{loading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-sm font-bold text-[#4285f4]">G</span>}{loading ? "Connecting to Google..." : "Continue with Google"}</button>
-          {!firebaseConfigured && <p className="mt-3 text-center text-[11px] text-amber-200/70">Add Firebase credentials to `.env.local` to enable Google sign-in.</p>}
-          <div className="mt-8 flex items-center justify-center gap-2 border-t border-white/[0.07] pt-4 text-[11px] text-white/40"><span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,.8)] animate-pulse" /> LIVE · Monitoring 12 districts across Maharashtra</div>
-        </GlassPanel>
-      </motion.div>
+    <main className="login-shell relative flex min-h-screen items-center overflow-hidden bg-[#080d14] px-5 py-8 text-white sm:px-10" onPointerMove={handlePointerMove} onPointerLeave={() => { setSceneTilt({ x: 0, y: 0 }); setPanelTilt({ x: 0, y: 0 }); }}>
+      <div className="login-atmosphere pointer-events-none absolute inset-0">
+        <div className="login-wave-field">{backgroundWaves.map((line) => <span key={line} style={{ "--wave-index": line } as React.CSSProperties} />)}</div><div className="login-noise" /><div className="login-particles">{particles.map((particle, index) => <span key={index} style={{ left: particle.left, top: particle.top, animationDelay: particle.delay, width: particle.size, height: particle.size }} />)}</div>
+      </div>
+
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1fr_380px] lg:gap-16">
+        <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="login-visual hidden min-h-[540px] lg:block" style={{ transform: `rotateX(${sceneTilt.y}deg) rotateY(${sceneTilt.x}deg)` }}>
+          <div className="login-eyebrow"><Activity className="h-3.5 w-3.5" /> RESILIENCE INTELLIGENCE NETWORK</div>
+          <div className="terrain-scene"><div className="terrain-ambient" /><div className="terrain-floor" /><div className="terrain-slab"><div className="terrain-contours">{contourLines.map((line) => <span key={line} />)}</div><span className="terrain-marker marker-cyan" /><span className="terrain-marker marker-orange" /><span className="terrain-marker marker-red" /></div></div>
+          <div className="login-callout login-callout-top"><span className="status-dot danger" /> Waterlogging watch</div>
+          <div className="login-callout login-callout-bottom"><span className="text-[9px] font-bold tracking-[0.18em] text-cyan-300/70">AI RISK MODEL</span><strong>Rainfall anomaly<br />detected near Pune basin</strong></div>
+          <div className="login-location"><MapPin className="h-3 w-3 text-cyan-300" /> Pune basin <span>·</span> 18.52°N 73.85°E</div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.12, ease: [0.22, 1, 0.36, 1] }} className="w-full" style={{ transform: `perspective(900px) rotateX(${panelTilt.y}deg) rotateY(${panelTilt.x}deg)` }}>
+          <GlassPanel className="login-card border-cyan-200/15 bg-[#08131c]/95 p-6 shadow-[0_24px_100px_rgba(0,0,0,.58),0_0_42px_rgba(14,165,233,.08)] sm:p-7">
+            <div className="mb-7 flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/30 bg-cyan-300/10"><Shield className="h-4 w-4 text-cyan-200" /></span><div><div className="text-[15px] font-bold tracking-tight text-white">ResiliAI</div><p className="text-[10px] text-white/40">Disaster resilience intelligence</p></div></div>
+            <h1 className="login-headline max-w-[300px] text-[31px] font-bold leading-[0.98] tracking-[-0.04em] text-white sm:text-[34px]">Build resilience<br />before the crisis.</h1>
+            <p className="mt-4 max-w-[290px] text-[12px] leading-5 text-white/50">Real-time disaster intelligence<br />for safer, stronger communities.</p>
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/[0.08] px-2.5 py-1 text-[10px] font-semibold text-cyan-100/80"><span className="h-1.5 w-1.5 rounded-full bg-teal-300 shadow-[0_0_8px_rgba(94,234,212,.9)]" /> Live monitoring across Maharashtra</div>
+            {error && <motion.div animate={{ x: [0, -5, 5, -3, 3, 0] }} className="mt-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-[11px] text-red-200">{error}</motion.div>}
+            <button disabled={loading || !firebaseConfigured} onClick={onLogin} className="mt-5 flex w-full items-center justify-center gap-3 rounded-[10px] border border-white/80 bg-[#f3f7f8] px-4 py-3 text-[12px] font-bold text-[#16242c] shadow-[0_0_0_2px_rgba(255,255,255,.15),0_8px_24px_rgba(0,0,0,.18)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60">{loading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-[#4285f4] shadow-sm">G</span>}{loading ? "Connecting to Google..." : "Continue with Google"}</button>
+            {!firebaseConfigured && <p className="mt-3 text-center text-[10px] text-amber-200/70">Add Firebase credentials to `.env.local` to enable Google sign-in.</p>}
+            <div className="mt-4 flex gap-4 text-[10px]"><a href="#privacy" className="text-white/45 hover:text-white/80">Privacy Policy</a><a href="#emergency" className="text-amber-300/80 hover:text-amber-200">Emergency Resources</a></div>
+            <p className="mt-5 max-w-[250px] text-[10px] leading-4 text-white/35">Built for citizens, responders, volunteers,<br />and command-center administrators.</p>
+          </GlassPanel>
+        </motion.div>
+      </div>
     </main>
   );
 }
@@ -379,7 +413,32 @@ function AuthGate({ children }: { children: React.ReactElement<{ user?: Firebase
   const [checking, setChecking] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  useEffect(() => { if (!firebaseAuth) { setChecking(false); return; } return onAuthStateChanged(firebaseAuth, (nextUser) => { setUser(nextUser); setChecking(false); }); }, []);
+  useEffect(() => {
+    if (!firebaseAuth) { setChecking(false); return; }
+
+    const timeout = window.setTimeout(() => {
+      setChecking(false);
+      setError("Authentication is taking too long to respond. You can try signing in again.");
+    }, 5000);
+    const unsubscribe = onAuthStateChanged(
+      firebaseAuth,
+      (nextUser) => {
+        window.clearTimeout(timeout);
+        setUser(nextUser);
+        setChecking(false);
+      },
+      () => {
+        window.clearTimeout(timeout);
+        setChecking(false);
+        setError("Authentication could not be initialized. Please try again.");
+      },
+    );
+
+    return () => {
+      window.clearTimeout(timeout);
+      unsubscribe();
+    };
+  }, []);
   const login = async () => {
     if (!firebaseAuth) return;
     setLoading(true);

@@ -11,8 +11,93 @@ body {
 }
 
 .login-atmosphere {
-  background: radial-gradient(circle at 50% 48%, rgba(41, 130, 160, 0.15), transparent 31%), linear-gradient(120deg, rgba(7, 22, 31, 0.94), rgba(8, 11, 18, 0.99));
+  background: radial-gradient(ellipse at 30% 48%, rgba(12, 105, 125, 0.3), transparent 42%), radial-gradient(ellipse at 84% 82%, rgba(119, 66, 37, 0.12), transparent 32%), linear-gradient(115deg, #071722 0%, #08111a 55%, #090c12 100%);
 }
+
+.login-shell::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(8, 13, 20, 0.08), rgba(8, 13, 20, 0.02) 52%, rgba(8, 13, 20, 0.5));
+  content: "";
+  pointer-events: none;
+}
+
+.login-noise { position: absolute; inset: 0; opacity: 0.16; background-image: radial-gradient(rgba(255, 255, 255, 0.24) 0.6px, transparent 0.7px), radial-gradient(rgba(60, 202, 209, 0.16) 0.5px, transparent 0.7px); background-position: 0 0, 13px 17px; background-size: 19px 19px, 23px 23px; mix-blend-mode: screen; }
+.login-wave-field { position: absolute; inset: 0; overflow: hidden; opacity: 0.58; transform: perspective(700px) rotateX(8deg) scale(1.08); transform-origin: center bottom; }
+.login-wave-field span { position: absolute; left: -12%; top: calc(4% + var(--wave-index) * 9%); width: 124%; height: 76px; border-top: 2px solid rgba(26, 165, 181, 0.32); border-radius: 50%; filter: drop-shadow(0 0 5px rgba(17, 171, 188, 0.18)); animation: background-wave-float 9s ease-in-out calc(var(--wave-index) * -0.55s) infinite alternate; }
+.login-wave-field span:nth-child(3n) { border-color: rgba(37, 118, 151, 0.28); }
+.login-wave-field span:nth-child(4n) { height: 100px; border-color: rgba(34, 187, 194, 0.24); }
+
+@keyframes background-wave-float { 50% { transform: translate3d(-2.5%, -9px, 0) rotate(1deg) scaleY(1.08); } 100% { transform: translate3d(2%, 6px, 0) rotate(-1deg) scaleY(0.94); } }
+
+.login-particles { position: absolute; inset: 0; overflow: hidden; }
+.login-particles span { position: absolute; border-radius: 50%; background: rgba(129, 230, 226, 0.55); box-shadow: 0 0 8px rgba(72, 211, 204, 0.45); animation: particle-drift 8s ease-in-out infinite; }
+.login-particles span:nth-child(3n) { background: rgba(241, 174, 85, 0.6); box-shadow: 0 0 8px rgba(241, 174, 85, 0.4); }
+.login-particles span:nth-child(4n) { background: rgba(255, 255, 255, 0.35); box-shadow: none; }
+
+@keyframes particle-drift { 50% { opacity: 0.22; transform: translate3d(8px, -12px, 0); } }
+
+.login-visual { position: relative; perspective: 1000px; transform-style: preserve-3d; transition: transform 180ms ease-out; }
+.terrain-scene { position: absolute; inset: 11% 2% 9%; perspective: 900px; transform-style: preserve-3d; }
+.terrain-ambient { position: absolute; left: 17%; top: 33%; width: 62%; height: 42%; border-radius: 50%; background: rgba(40, 193, 197, 0.22); filter: blur(42px); transform: rotateX(68deg); }
+.terrain-floor { position: absolute; left: 4%; top: 30%; width: 86%; height: 55%; border: 1px solid rgba(50, 181, 194, 0.16); background-image: linear-gradient(rgba(67, 202, 209, 0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(67, 202, 209, 0.16) 1px, transparent 1px); background-size: 40px 28px; mask-image: linear-gradient(transparent, black 34%, transparent); transform: rotateX(70deg) rotateZ(-7deg); }
+.terrain-slab { position: absolute; left: 18%; top: 25%; width: 60%; height: 47%; overflow: hidden; border: 1px solid rgba(75, 220, 220, 0.48); border-radius: 18px; background: linear-gradient(145deg, rgba(17, 85, 99, 0.46), rgba(5, 31, 45, 0.5)); box-shadow: 0 24px 35px rgba(0, 0, 0, 0.38), 0 0 32px rgba(26, 189, 193, 0.2), inset 0 0 30px rgba(104, 237, 226, 0.08); transform: rotateX(57deg) rotateZ(-8deg) translateZ(28px); transform-style: preserve-3d; }
+.terrain-slab::before { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(144, 255, 239, 0.14), transparent 38%, rgba(4, 17, 27, 0.2)); content: ""; }
+.terrain-contours { position: absolute; inset: 15% 8%; transform: rotate(-4deg); }
+.terrain-contours span { position: absolute; left: 0; width: 100%; height: 24px; border-top: 1px solid rgba(113, 238, 224, 0.42); border-radius: 50%; transform: translateY(calc(var(--contour-index, 0) * 22px)) skewX(-16deg); }
+.terrain-contours span:nth-child(1) { top: 2%; }.terrain-contours span:nth-child(2) { top: 15%; }.terrain-contours span:nth-child(3) { top: 29%; }.terrain-contours span:nth-child(4) { top: 44%; }.terrain-contours span:nth-child(5) { top: 59%; }.terrain-contours span:nth-child(6) { top: 74%; }.terrain-contours span:nth-child(7) { top: 88%; }
+.terrain-marker { position: absolute; width: 9px; height: 9px; border: 2px solid rgba(255, 255, 255, 0.8); border-radius: 50%; box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 20%, transparent), 0 8px 13px rgba(0, 0, 0, 0.5); transform: translateZ(28px); animation: marker-float 3.6s ease-in-out infinite; }
+.terrain-marker::after { position: absolute; left: 50%; top: 100%; width: 1px; height: 18px; background: linear-gradient(currentColor, transparent); content: ""; opacity: 0.7; }
+.marker-cyan { left: 47%; top: 47%; color: #4ce5d3; background: currentColor; }
+.marker-orange { left: 29%; top: 35%; color: #f3ac4c; background: currentColor; animation-delay: -1.1s; }
+.marker-red { left: 67%; top: 29%; color: #ee6257; background: currentColor; animation-delay: -2.2s; }
+
+@keyframes marker-float { 50% { transform: translate3d(0, -6px, 28px); } }
+
+.login-3d-orb { position: absolute; left: 27%; top: 19%; width: min(42vw, 540px); aspect-ratio: 1; border: 1px solid rgba(79, 221, 226, 0.48); border-radius: 50%; background: radial-gradient(circle at 36% 30%, rgba(83, 225, 218, 0.34), rgba(12, 54, 70, 0.12) 34%, transparent 65%); box-shadow: inset -28px -24px 55px rgba(0, 0, 0, 0.5), inset 18px 12px 35px rgba(86, 218, 220, 0.16), 0 0 100px rgba(21, 169, 183, 0.2); transform: rotateX(57deg) rotateZ(-18deg); transform-style: preserve-3d; animation: orb-float 8s ease-in-out infinite; }
+.login-3d-orb::before, .login-3d-orb::after { position: absolute; inset: 11%; border: 1px solid rgba(91, 225, 224, 0.26); border-radius: 50%; content: ""; transform: rotateY(66deg); }
+.login-3d-orb::after { inset: 22%; border-color: rgba(242, 170, 76, 0.32); transform: rotateY(-62deg); }
+.login-3d-orb span { position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; border-radius: 50%; background: #54e4d8; box-shadow: 0 0 18px #54e4d8; transform: translate(-50%, -50%) translateZ(20px); }
+.login-3d-orb span:nth-child(2) { left: 32%; top: 34%; width: 4px; height: 4px; background: #f2aa4c; box-shadow: 0 0 13px #f2aa4c; }
+.login-3d-orb span:nth-child(3) { left: 69%; top: 42%; width: 5px; height: 5px; background: #e4574f; box-shadow: 0 0 14px #e4574f; }
+.login-depth-ring { position: absolute; left: 38%; top: 51%; width: min(62vw, 760px); aspect-ratio: 1; border: 1px solid rgba(43, 185, 203, 0.3); border-radius: 50%; transform: translate(-50%, -50%) rotateX(65deg) rotateZ(-12deg); box-shadow: 0 0 42px rgba(19, 166, 183, 0.12); }
+.depth-ring-one { animation: depth-pulse 5s ease-in-out infinite; }
+.depth-ring-two { width: min(37vw, 460px); border-color: rgba(242, 170, 76, 0.24); animation: depth-pulse 5s ease-in-out -2s infinite; }
+
+@keyframes orb-float { 50% { transform: translate3d(0, -12px, 0) rotateX(57deg) rotateZ(-13deg); } }
+@keyframes depth-pulse { 50% { opacity: 0.42; transform: translate(-50%, -50%) rotateX(65deg) rotateZ(8deg) scale(1.08); } }
+
+.login-eyebrow { position: absolute; left: 2%; top: 2%; display: flex; align-items: center; gap: 7px; color: rgba(125, 211, 252, 0.6); font-size: 9px; font-weight: 700; letter-spacing: 0.18em; }
+.terrain-lines { position: absolute; left: -12%; right: 27%; bottom: -8%; height: 62%; transform: perspective(500px) rotateX(56deg) rotateZ(-3deg) scale(1.35); transform-origin: center bottom; opacity: 0.9; }
+.terrain-lines span { position: absolute; left: -10%; width: 120%; height: 68px; border-top: 3px solid rgba(26, 174, 190, 0.42); border-radius: 50%; transform: translateY(calc(var(--line-index) * 31px)) rotate(calc(var(--line-index) * 1.4deg)); filter: drop-shadow(0 0 7px rgba(12, 181, 197, 0.3)); }
+.terrain-lines span:nth-child(3n) { border-color: rgba(57, 119, 153, 0.34); }
+.login-grid { position: absolute; left: 0; right: 0; bottom: 0; height: 42%; opacity: 0.24; background-image: linear-gradient(rgba(65, 181, 199, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(65, 181, 199, 0.16) 1px, transparent 1px); background-size: 52px 32px; transform: perspective(380px) rotateX(62deg) scale(1.3); transform-origin: bottom; mask-image: linear-gradient(transparent, black 40%, transparent); }
+.radar-stage { position: absolute; left: 8%; right: 8%; top: 20%; height: 58%; transform: rotateX(53deg) rotateZ(-7deg); transform-style: preserve-3d; }
+.radar-platform { position: absolute; left: 14%; top: 25%; width: 52%; height: 46%; border: 1px solid rgba(42, 193, 205, 0.5); border-radius: 22px; background: linear-gradient(145deg, rgba(12, 57, 75, 0.32), rgba(4, 24, 36, 0.08)); box-shadow: 0 0 28px rgba(14, 165, 183, 0.2), inset 0 0 36px rgba(31, 172, 186, 0.08); transform: translateZ(25px); }
+.radar-platform::before, .radar-platform::after { position: absolute; border: 1px solid rgba(47, 196, 209, 0.3); border-radius: 50%; content: ""; }
+.radar-platform::before { inset: 22% 25%; }
+.radar-platform::after { inset: 36% 36%; }
+.radar-scan { position: absolute; left: 50%; top: 50%; width: 40%; height: 1px; background: linear-gradient(90deg, transparent, rgba(95, 236, 223, 0.9)); transform-origin: left; animation: radar-beam 4.5s linear infinite; }
+.radar-point { position: absolute; width: 5px; height: 5px; border-radius: 50%; box-shadow: 0 0 9px currentColor; }
+.point-a { left: 47%; top: 49%; color: #32d5ce; background: currentColor; }
+.point-b { left: 37%; top: 40%; color: #f0a14b; background: currentColor; }
+.point-c { left: 61%; top: 33%; color: #ed6556; background: currentColor; }
+.login-callout { position: absolute; border: 1px solid transparent; background: linear-gradient(rgba(7, 23, 33, 0.76), rgba(7, 23, 33, 0.76)) padding-box, linear-gradient(135deg, rgba(94, 234, 212, 0.5), rgba(94, 234, 212, 0.04)) border-box; box-shadow: 0 14px 32px rgba(0, 0, 0, 0.34), inset 0 1px rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); animation: callout-float 4s ease-in-out infinite; }
+.login-callout-top { right: 7%; top: 18%; border-color: rgba(228, 87, 79, 0.35); border-radius: 999px; padding: 6px 11px; color: rgba(255, 225, 220, 0.82); font-size: 10px; }
+.login-callout-bottom { left: 3%; bottom: 9%; display: flex; flex-direction: column; gap: 5px; border-radius: 10px; padding: 11px 13px; color: rgba(255, 255, 255, 0.76); font-size: 10px; line-height: 1.35; }
+.login-callout-bottom { animation-delay: -2s; }
+.login-location { position: absolute; left: 30%; bottom: 1%; display: flex; align-items: center; gap: 5px; color: rgba(255, 255, 255, 0.32); font-size: 9px; letter-spacing: 0.04em; }
+.status-dot { display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: #e4574f; box-shadow: 0 0 8px rgba(228, 87, 79, 0.8); }
+.login-card { position: relative; transform-style: preserve-3d; border-color: rgba(94, 234, 212, 0.2) !important; box-shadow: 0 28px 80px rgba(0, 0, 0, 0.52), 0 0 34px rgba(35, 195, 201, 0.1), inset 0 1px rgba(255, 255, 255, 0.1) !important; transition: box-shadow 220ms ease, border-color 220ms ease; }
+.login-card:hover { border-color: rgba(94, 234, 212, 0.38) !important; box-shadow: 0 34px 96px rgba(0, 0, 0, 0.62), 0 0 42px rgba(35, 195, 201, 0.16), inset 0 1px rgba(255, 255, 255, 0.14) !important; }
+.login-headline { text-shadow: 0 0 22px rgba(129, 230, 226, 0.14), 0 3px 16px rgba(0, 0, 0, 0.48); }
+.login-card button:active { transform: translateY(2px) scale(0.985); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 3px 8px rgba(0, 0, 0, 0.25) !important; }
+.status-dot { animation: status-pulse 2.4s ease-in-out infinite; }
+
+@keyframes callout-float { 50% { transform: translateY(-7px); } }
+@keyframes status-pulse { 50% { box-shadow: 0 0 0 4px rgba(228, 87, 79, 0.08), 0 0 12px rgba(228, 87, 79, 0.9); } }
+
+@keyframes radar-beam { to { transform: rotate(360deg); } }
 
 .login-glow {
   position: absolute;
@@ -27,7 +112,7 @@ body {
 }
 
 .login-glow-one { left: 8%; top: 8%; background: #087f9b; }
-.login-glow-two { right: 8%; bottom: 4%; background: #d97729; animation-delay: -5s; }
+.login-glow-two { right: 5%; bottom: 4%; background: #a45b32; opacity: 0.1; animation-delay: -5s; }
 
 .rain-field span {
   position: absolute;
@@ -191,4 +276,9 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+@media (max-width: 1023px) {
+  .login-shell { justify-content: center; }
+  .login-atmosphere { opacity: 0.62; }
 }
