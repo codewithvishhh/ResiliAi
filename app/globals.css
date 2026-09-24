@@ -6,6 +6,14 @@ html {
   scroll-behavior: smooth;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 body {
   background: #000000;
 }
@@ -281,4 +289,56 @@ textarea:focus-visible {
 @media (max-width: 1023px) {
   .login-shell { justify-content: center; }
   .login-atmosphere { opacity: 0.62; }
+}
+
+/* User GPS location & Hazard Pin Markers */
+.user-location-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-location-marker .pulse-ring {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.4);
+  animation: user-pulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+.user-location-marker .dot-center {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.9);
+}
+@keyframes user-pulse {
+  0% { transform: scale(0.6); opacity: 0.95; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.user-hazard-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(228, 87, 79, 0.25);
+  border: 2px solid #e4574f;
+  color: #ffffff;
+  font-size: 15px;
+  box-shadow: 0 0 16px rgba(228, 87, 79, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.user-hazard-marker:hover {
+  transform: scale(1.2);
+}
+
+.crosshair-cursor {
+  cursor: crosshair !important;
 }

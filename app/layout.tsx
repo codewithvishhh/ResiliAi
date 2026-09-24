@@ -3,9 +3,9 @@ import "./globals.css";
 import "leaflet/dist/leaflet.css";
 
 export const metadata: Metadata = {
-  title: "ResiliAI — AI for safer, stronger communities",
+  title: "GeoSphere — Interactive Vector Map & Spatial Suite",
   description:
-    "Hyperlocal disaster risk prediction, early warning, emergency management, and community resilience platform.",
+    "Modern, production-grade interactive vector map application featuring 3D isometric terrain, multi-modal routing, and spatial intelligence.",
 };
 
 export default function RootLayout({
